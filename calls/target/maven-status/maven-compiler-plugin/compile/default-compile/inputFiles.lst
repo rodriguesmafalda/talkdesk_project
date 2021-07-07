@@ -1,0 +1,12 @@
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/service/CallServiceImpl.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/model/Call.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/repos/CallRepository.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/exceptions/CallNotFoundException.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/exceptions/BadParameterException.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/model/CallStatistics.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/service/CallService.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/enums/CallStatus.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/controller/CallController.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/dtos/CallDto.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/enums/CallType.java
+/home/mafalda/Desktop/projects/talkdesk/challenge/talkdesk_project/calls/src/main/java/talkdesk/mafalda/calls/CallsServiceApplication.java

@@ -1,0 +1,12 @@
+talkdesk/mafalda/calls/service/CallService.class
+talkdesk/mafalda/calls/CallsServiceApplication.class
+talkdesk/mafalda/calls/dtos/CallDto.class
+talkdesk/mafalda/calls/repos/CallRepository.class
+talkdesk/mafalda/calls/service/CallServiceImpl.class
+talkdesk/mafalda/calls/exceptions/CallNotFoundException.class
+talkdesk/mafalda/calls/enums/CallStatus.class
+talkdesk/mafalda/calls/enums/CallType.class
+talkdesk/mafalda/calls/model/Call.class
+talkdesk/mafalda/calls/controller/CallController.class
+talkdesk/mafalda/calls/exceptions/BadParameterException.class
+talkdesk/mafalda/calls/model/CallStatistics.class
