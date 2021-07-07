@@ -41,7 +41,6 @@ public class CallController {
             @RequestParam(value = "type", required = false, defaultValue = "") CallType type,
             @RequestParam(value = "status", required = false, defaultValue = "") CallStatus status) {
         LOGGER.info("Accessing GET Calls endpoint");
-
         return callService.getCalls(pageable.getPageNumber(), pageable.getPageSize(), type, status);
     }
 

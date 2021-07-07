@@ -37,6 +37,11 @@ services:
         max-size: 10m
         max-file: "3"
     restart: always
+    #volumes:
+      #- ./postgres-data:/var/lib/postgresql/data
+      # copy the sql script to create tables and the data
+      #- ./sql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+
     networks:
       - call-service
 

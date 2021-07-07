@@ -1,18 +1,14 @@
 package talkdesk.mafalda.calls.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 /**
  * Save all calls and their associated information in the database
  */
 @Entity
-@Table(name = "Call")
+@Table(name = "call")
 public class Call {
 
     public Call() {
@@ -22,40 +18,47 @@ public class Call {
      * Id of the call (primary key)
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
     /**
      * the phone number of the caller
      */
-    @NotEmpty
+    @NotNull
+    @Column(name = "caller_number")
     private String callerNumber;
 
     /**
      * the phone number of the callee
      */
-    @NotEmpty
+    @NotNull
+    @Column(name = "callee_number")
     private String calleeNumber;
 
     /**
-     * start timestamp of the call
+     * start time of the call
      */
+    @Column(name = "start_time")
     private Timestamp startTime;
 
     /**
-     * end timestamp of the call
+     * end time of the call
      */
+    @Column(name = "end_time")
     private Timestamp endTime;
 
     /**
      * type of the call (Inbound or Outbound)
      */
-    @NotEmpty
+    @NotNull
+    @Column(name = "type")
     private String type;
 
     /**
      * status of the call (ON_CALL or ENDED_CALL)
      */
+    @Column(name = "status")
     private String status;
 
 

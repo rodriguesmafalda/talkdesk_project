@@ -35,14 +35,6 @@ The Client should allow the reviewer to call all operations of the rest api with
 
 The restApi was developed with [springBoot] and PostgreSQL database
 
-
-
-[Docker]: <https://www.docker.com/get-started>
-[Docker-compose]: <https://docs.docker.com/compose/install/>
-[springBoot]: <https://spring.io/projects/spring-boot>
-
-
-
 ### Prerequisites
 * [Docker]
 * [Docker-compose]
@@ -62,3 +54,14 @@ docker exec -it <pod_name> psql -U calls
 
 ###### show databases
 SELECT datname FROM pg_database;
+
+
+
+
+
+
+[Docker]: <https://www.docker.com/get-started>
+[Docker-compose]: <https://docs.docker.com/compose/install/>
+[springBoot]: <https://spring.io/projects/spring-boot>
+[Postman]
+

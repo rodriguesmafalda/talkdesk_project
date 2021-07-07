@@ -1,3 +1,16 @@
+-- Creation of product table
+CREATE TABLE IF NOT EXISTS Call (
+  id BIGINT NOT NULL,
+  callee_number varchar(250) NOT NULL,
+  caller_number varchar(250) NOT NULL,
+  end_time TIMESTAMP,
+  start_time TIMESTAMP,
+  status varchar(250),
+  type varchar(250) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+
 
 INSERT INTO call (id, caller_number, callee_number, start_time, end_time, type, status)
 VALUES(1, '231441231', '231441232', '2021-06-09 16:43:19.77','2021-06-09 17:43:19.77', 'INBOUND', 'ENDED_CALL');

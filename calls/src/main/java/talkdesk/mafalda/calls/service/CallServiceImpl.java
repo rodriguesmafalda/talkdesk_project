@@ -253,12 +253,13 @@ public class CallServiceImpl implements CallService {
      * @return day and total cost
      */
     public Map<String, Double> getTotalCostByOutbound() {
-        //map that will be stored the date and the total cost
-        Map<String, Double> mapTotalCost = new HashMap<>();
-        //list of call filtering by type and ended status
-        List<Call> callList = callRepository.findCallsByTypeAndStatus(OUTBOUND, ENDED_CALL);
 
-        for (Call call : callList) {
+        Map<String, Double> mapTotalCost = new HashMap<>();
+
+        //list of call filtering by type and ended status
+        List<Call> calls = callRepository.findCallsByTypeAndStatus(OUTBOUND, ENDED_CALL);
+
+        for (Call call : calls) {
             long durationCallTime = call.getEndTime().getTime() - call.getStartTime().getTime();
             long durationCallTimeMinutes = TimeUnit.MILLISECONDS.toMinutes(durationCallTime) % TimeUnit.HOURS.toMinutes(1);
 
@@ -268,12 +269,12 @@ public class CallServiceImpl implements CallService {
             if (durationCallTimeMinutes > 5)
                 totalCost = (durationCallTimeMinutes - 5) * 0.05;
 
-            //check if the date exists in the map
+            //check if the date exists on the map
             if (!mapTotalCost.containsKey(getDate(call.getStartTime()))) {
                 //add the date and the total call cost
                 mapTotalCost.put(getDate(call.getStartTime()), totalCost);
             } else {
-                //assign to the existing date, an increase of the total call cost
+                //assign to the existing date, an increase the total call cost
                 mapTotalCost.put(getDate(call.getStartTime()), mapTotalCost.get(getDate(call.getStartTime())) + totalCost);
             }
         }
@@ -291,10 +292,10 @@ public class CallServiceImpl implements CallService {
     }
 
     /**
-     * Auxiliary function to get and format the date
+     * Auxiliary function to format the date to a string
      *
      * @param time timestamp
-     * @return date string
+     * @return time into String
      */
     private String getDate(Timestamp time) {
         Calendar calendar = Calendar.getInstance();
