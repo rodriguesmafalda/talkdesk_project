@@ -56,10 +56,6 @@ This client consists of the following requests:
 * [Postman]
 
 
-OpenAPI spec is generated for the created Rest API.
-
-
-
 ## Run the application
 
 1. Create a common network and run the application
@@ -86,7 +82,7 @@ docker-compose rm -v  call-service postgres
 
 ## Interact with application
 
-You can use [Postman] to make requests to the application by importing the file: **batata.json**
+You can use [Postman] to make requests to the application by importing the file: **talkdesk_challenge.postman_collection.json**
 
 Also, this application have an integration with [OpenApi] and [Swagger Ui]. Because of that is possible 
 to see the documentation by the endpoint:

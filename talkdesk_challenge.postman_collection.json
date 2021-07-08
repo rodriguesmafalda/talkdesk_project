@@ -1,0 +1,152 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Talkdesk_challenge",
+		"_postman_id": "74146610-3360-02a9-8952-4ad596432282",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Calls",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/calls?type=INBOUND&status=ON_CALL",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"calls"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0",
+							"equals": true,
+							"description": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "5",
+							"equals": true,
+							"description": "",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "INBOUND",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "status",
+							"value": "ON_CALL",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Calls Statistics",
+			"request": {
+				"url": "http://localhost:8080/calls/statistics",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post Call",
+			"request": {
+				"url": "http://localhost:8080/calls/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"callerNumber\": \"12\",\n\t\"calleeNumber\": \"123456\",\n\t\"type\":\"INBOUND\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post Calls (Bulk)",
+			"request": {
+				"url": "http://localhost:8080/calls/create/bulk",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"callerNumber\": \"12\",\n\t\"calleeNumber\": \"123456\",\n\t\"type\":\"INBOUND\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "End Call",
+			"request": {
+				"url": "http://localhost:8080/calls/endCall/1",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"callerNumber\": \"12\",\n\t\"calleeNumber\": \"123456\",\n\t\"type\":\"INBOUND\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Call",
+			"request": {
+				"url": "http://localhost:8080/calls/7",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
