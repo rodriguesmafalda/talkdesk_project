@@ -61,7 +61,6 @@ This client consists of the following requests:
 1. Create a common network and run the application
 ```sh
 docker network create call-service
-docker-compose up -d
 ```
 
 2. Run the application
@@ -69,14 +68,9 @@ docker-compose up -d
 docker-compose up -d --build
 ```
 
-3. Stop the application
+3. Stop and removing the application
 ```sh
-docker-compose stop call-service postgres
-```
-
-4. Remove the application from your computer
-```sh
-docker-compose rm -v  call-service postgres
+docker-compose down
 ```
 
 
