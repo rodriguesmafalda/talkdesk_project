@@ -1,9 +1,17 @@
 package talkdesk.mafalda.calls.exceptions;
 
 public class CallBadRequestException extends RuntimeException {
-    public CallBadRequestException(String message) {
-        super(message);
+
+    private String description;
+
+    public CallBadRequestException(String description) {
+        super(description);
     }
+
+    public String getDescription() {
+        return this.description;
+    }
+
 
 }
 

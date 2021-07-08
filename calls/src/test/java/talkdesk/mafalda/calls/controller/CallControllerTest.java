@@ -10,8 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import talkdesk.mafalda.calls.dtos.CallDto;
-import talkdesk.mafalda.calls.enums.CallStatus;
-import talkdesk.mafalda.calls.enums.CallType;
 import talkdesk.mafalda.calls.exceptions.CallNotFoundException;
 import talkdesk.mafalda.calls.model.Call;
 import talkdesk.mafalda.calls.service.CallService;
@@ -85,7 +83,7 @@ class CallControllerTest {
     void givenType_whenGettingCalls_thenShouldReturnPageInfoByType() throws Exception {
         Call call = createCall();
         Page<Call> page = new PageImpl<>(Collections.singletonList(call));
-        given(callService.getCalls(0, 5, CallType.INBOUND, CallStatus.ENDED_CALL)).willReturn(page);
+        given(callService.getCalls(0, 5, CALL_TYPE, ENDED_CALL)).willReturn(page);
 
         ResultActions resultActions = mockMvc.perform(get("/calls/")
                 .param("page", "0")

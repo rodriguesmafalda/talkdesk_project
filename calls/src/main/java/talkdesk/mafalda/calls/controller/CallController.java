@@ -11,8 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import talkdesk.mafalda.calls.dtos.CallDto;
-import talkdesk.mafalda.calls.enums.CallStatus;
-import talkdesk.mafalda.calls.enums.CallType;
+import talkdesk.mafalda.calls.exceptions.CallBadRequestException;
 import talkdesk.mafalda.calls.exceptions.CallNotFoundException;
 import talkdesk.mafalda.calls.model.Call;
 import talkdesk.mafalda.calls.model.CallStatistics;
@@ -39,10 +38,12 @@ public class CallController {
     @ResponseStatus(HttpStatus.OK)
     public Page<Call> getCalls(
             @ParameterObject Pageable pageable,
-            @RequestParam(value = "type", required = false, defaultValue = "") CallType type,
-            @RequestParam(value = "status", required = false, defaultValue = "") CallStatus status) {
+            @RequestParam(value = "type", required = false, defaultValue = "") String type,
+            @RequestParam(value = "status", required = false, defaultValue = "") String status)
+            throws CallBadRequestException {
         LOGGER.info("Accessing GET Calls endpoint");
         return callService.getCalls(pageable.getPageNumber(), pageable.getPageSize(), type, status);
+
     }
 
     @Operation(summary = "Create one call")
@@ -53,6 +54,7 @@ public class CallController {
         return callService.saveCall(calldto);
     }
 
+    @Operation(summary = "Create multiple calls")
     @PostMapping("/create/bulk")
     @ResponseStatus(HttpStatus.CREATED)
     public List<Call> saveCalls(@RequestBody @Validated List<CallDto> calls) {
@@ -60,13 +62,15 @@ public class CallController {
         return callService.saveCalls(calls);
     }
 
+    @Operation(summary = "End call")
     @PatchMapping("/end/{callId}")
     @ResponseStatus(HttpStatus.OK)
-    public Call endCall(@PathVariable(value = "callId") Long callId) {
+    public Call endCall(@PathVariable(value = "callId") Long callId) throws CallNotFoundException {
         LOGGER.info("Accessing PATCH Calls endpoint for ID: {}", callId);
         return callService.endCall(callId);
     }
 
+    @Operation(summary = "Delete call")
     @DeleteMapping("/{callId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCall(@PathVariable(value = "callId") Long callId) throws CallNotFoundException {
@@ -81,8 +85,13 @@ public class CallController {
     }
 
     @ExceptionHandler({CallNotFoundException.class})
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The call does not exist")
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public void handleCallNotFoundException(CallNotFoundException exception) {
+    }
+
+    @ExceptionHandler({CallBadRequestException.class})
+    //@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public void handleCallBadRequestException(CallBadRequestException exception) {
     }
 
 }

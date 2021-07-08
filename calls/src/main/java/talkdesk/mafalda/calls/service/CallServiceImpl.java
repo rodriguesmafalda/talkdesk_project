@@ -8,8 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import talkdesk.mafalda.calls.dtos.CallDto;
-import talkdesk.mafalda.calls.enums.CallStatus;
-import talkdesk.mafalda.calls.enums.CallType;
+import talkdesk.mafalda.calls.exceptions.CallBadRequestException;
 import talkdesk.mafalda.calls.exceptions.CallNotFoundException;
 import talkdesk.mafalda.calls.model.Call;
 import talkdesk.mafalda.calls.model.CallStatistics;
@@ -40,12 +39,26 @@ public class CallServiceImpl implements CallService {
     }
 
     @Override
-    public Page<Call> getCalls(int pageNumber, int pageSize, CallType type, CallStatus status) {
+    public Page<Call> getCalls(int pageNumber, int pageSize, String type, String status) {
         Pageable paging = PageRequest.of(pageNumber, pageSize);
-        if (type == null || status == null) {
-            return this.callRepository.findCallsByStatus(ENDED_CALL, paging);
+
+        if (!type.isEmpty() && (!type.equals(INBOUND) && !type.equals(OUTBOUND))) {
+            throw new CallBadRequestException("The call type must be OUTBOUND or INBOUND not " + type);
         }
-        return this.callRepository.findAllByStatusAndType(status.toString(), type.toString(), paging);
+
+        if (!status.isEmpty() && (!status.equals(ON_CALL) && !status.equals(ENDED_CALL))) {
+            throw new IllegalArgumentException("The call status must be ON_CALL or ENDED_CALL not " + status);
+        }
+
+        if (!type.isEmpty() && status.isEmpty()) {
+            return this.callRepository.findCallsByType(type, paging);
+        } else if (type.isEmpty() && !status.isEmpty()) {
+            return this.callRepository.findCallsByStatus(status, paging);
+        }else if (type.isEmpty() && status.isEmpty()){
+            return this.callRepository.findAll(paging);
+        }
+
+        return this.callRepository.findAllByStatusAndType(status, type, paging);
     }
 
 
@@ -78,9 +91,10 @@ public class CallServiceImpl implements CallService {
     }
 
     @Override
-    public void deleteCall(long id) {
-        LOGGER.debug("Deleting the call Id: {}", id);
-        this.callRepository.deleteById(id);
+    public void deleteCall(long callId) {
+        LOGGER.debug("Deleting the call Id: {}", callId);
+        Call call = verifyCallId(callId);
+        this.callRepository.deleteById(call.getId());
     }
 
     @Override

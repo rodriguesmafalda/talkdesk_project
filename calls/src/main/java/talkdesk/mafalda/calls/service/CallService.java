@@ -49,6 +49,6 @@ public interface CallService {
      * @param status     call status
      * @return the page of the list of calls
      */
-    Page<Call> getCalls(int pageNumber, int pageSize, CallType type, CallStatus status);
+    Page<Call> getCalls(int pageNumber, int pageSize, String type, String status);
 
 }
