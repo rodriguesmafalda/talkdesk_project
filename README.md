@@ -1,7 +1,7 @@
 # Talkdesk Challenge
 A service to manage calls from Call service.
 
-### Description
+## Description
 The main objective of this challenge is to implement a service to manage a specific resource: Calls. The Call resource represents a phone call between two numbers with the following attributes:
 
 - Caller Number: the phone number of the caller.
@@ -30,23 +30,42 @@ This Rest API should be able to manage and persist the Call resource, providing 
 
 The Client should allow the reviewer to call all operations of the rest api without having to handle the connection by himself. There are no restrictions on the programming language for this component.
 
-### The application
+## The application
+
 #### RestAPI 
 
-The restApi was developed with [springBoot] and PostgreSQL database
+The restApi was developed with [springBoot] and PostgreSQL database.
+I use [Flyway] ind order to have version control of my database.
+
 
 ### Prerequisites
 * [Docker]
 * [Docker-compose]
+* [Postman]
 
 
 
 
-## Run application
+## Run the application
 
+1. Clone the Github repository to your local machine
+```sh
+git clone https://github.com/rodriguesmafalda/talkdesk_project.git
+```
+
+2. Create a common network and run the application
+```sh
 docker network create call-service
-docker-compose up
+docker-compose up -d
+```
 
+
+### Application call-service Cheat Sheet:
+
+```shell
+# Get the logs of call-service
+docker-compose logs -f call-service
+```
 
 
 #### db hacks
@@ -55,6 +74,9 @@ docker exec -it <pod_name> psql -U calls
 ###### show databases
 SELECT datname FROM pg_database;
 
+##dump db
+docker exec -it postgres pg_dump -U calls > backup.sql
+
 
 
 
@@ -62,6 +84,7 @@ SELECT datname FROM pg_database;
 
 [Docker]: <https://www.docker.com/get-started>
 [Docker-compose]: <https://docs.docker.com/compose/install/>
-[springBoot]: <https://spring.io/projects/spring-boot>
-[Postman]
+[springBoot]: <https://spring.io/projects/spring-boot/>
+[Postman]: <https://learning.postman.com/docs/getting-started/introduction/>
+[Flyway]: <https://flywaydb.org/documentation/getstarted/>
 
