@@ -36,6 +36,7 @@ public class CallController {
     //TODO: CONTROL THE ERROR OF BAD PARAMS
     @Operation(summary = "Get the pagination of the list of calls")
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Page<Call> getCalls(
             @ParameterObject Pageable pageable,
             @RequestParam(value = "type", required = false, defaultValue = "") CallType type,
@@ -79,8 +80,8 @@ public class CallController {
         return callService.getCallStatistics();
     }
 
-    @ExceptionHandler(CallNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({CallNotFoundException.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The call does not exist")
     public void handleCallNotFoundException(CallNotFoundException exception) {
     }
 

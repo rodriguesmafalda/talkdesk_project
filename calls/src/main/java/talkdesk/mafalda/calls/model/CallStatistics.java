@@ -6,7 +6,7 @@ public class CallStatistics {
 
     private Map<String, String> totalInboundCallDuration;
     private Map<String, String> totalOutboundCallDuration;
-    private long totalNumberOfCalls;
+    private int totalNumberOfCalls;
     private Map<String, Map<String, Long>> totalCallsByCallerNumber;
     private Map<String, Map<String, Long>> totalCallsByCalleeNumber;
     private Map<String, Double> totalCostByOutbound;
@@ -31,7 +31,7 @@ public class CallStatistics {
         return totalNumberOfCalls;
     }
 
-    public void setTotalNumberOfCalls(long totalNumberOfCalls) {
+    public void setTotalNumberOfCalls(int totalNumberOfCalls) {
         this.totalNumberOfCalls = totalNumberOfCalls;
     }
 

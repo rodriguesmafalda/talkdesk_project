@@ -53,7 +53,7 @@ public class CallServiceImpl implements CallService {
     public Call saveCall(CallDto callDto) {
         checkIfCallIsPossible(callDto);
         Call call = transformToEntity(callDto);
-        LOGGER.debug("Creating call: {}", call);
+        LOGGER.debug("Creating call: {}", call.getId());
         return callRepository.save(call);
     }
 
@@ -73,7 +73,7 @@ public class CallServiceImpl implements CallService {
         Call call = verifyCallId(callId);
         setCallStatus(call, ENDED_CALL);
         call.setEndTime(new Timestamp(System.currentTimeMillis()));
-        LOGGER.debug("Ending the call the call: {}", call);
+        LOGGER.debug("Ending the call the call: {}", call.getId());
         return this.callRepository.save(call);
     }
 
