@@ -2,7 +2,6 @@ package talkdesk.mafalda.calls.dtos;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Objects;
 
 
 public class CallDto implements Serializable {
@@ -44,21 +43,6 @@ public class CallDto implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CallDto callDto = (CallDto) o;
-        return Objects.equals(callerNumber, callDto.callerNumber) &&
-                Objects.equals(calleeNumber, callDto.calleeNumber) &&
-                Objects.equals(type, callDto.type);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(callerNumber, calleeNumber, type);
     }
 
     public CallDto(String callerNumber, String calleeNumber, String type) {

@@ -84,6 +84,7 @@ class CallControllerTest {
                         "\"callerNumber\":\"" + callDto2.getCalleeNumber() + "\"," +
                         "\"type\":\"" + callDto2.getType() + "\"}]"))
                 .andExpect(status().isCreated());
+
     }
 
     @Test

@@ -54,7 +54,7 @@ public class CallServiceImpl implements CallService {
             return this.callRepository.findCallsByType(type, paging);
         } else if (type.isEmpty() && !status.isEmpty()) {
             return this.callRepository.findCallsByStatus(status, paging);
-        } else if (type.isEmpty() && status.isEmpty()) {
+        } else if (type.isEmpty()) {
             return this.callRepository.findAll(paging);
         }
 
@@ -121,22 +121,21 @@ public class CallServiceImpl implements CallService {
      *
      * @param callDto model received
      */
-    //TODO: CHANGE EXCEPTION
     private void checkIfCallIsPossible(CallDto callDto) {
 
         if (callDto.getCalleeNumber().equals(callDto.getCallerNumber())) {
             LOGGER.error("Callee number should be different from than caller number");
-            throw new IllegalArgumentException("Callee number should be different from than caller number.");
+            throw new CallBadRequestException("Callee number should be different from than caller number.");
         }
 
         List<Call> calls = callRepository.findCallsByStatus(ON_CALL);
         for (Call call : calls) {
             if (call.getCallerNumber().equals(callDto.getCallerNumber())) {
                 LOGGER.error("Callee number {} is busy", callDto.getCallerNumber());
-                throw new IllegalArgumentException("Caller number " + callDto.getCallerNumber() + " is busy.");
+                throw new CallBadRequestException("Caller number " + callDto.getCallerNumber() + " is busy.");
             } else if (call.getCalleeNumber().equals(callDto.getCalleeNumber())) {
                 LOGGER.error("Callee number {} is busy", callDto.getCalleeNumber());
-                throw new IllegalArgumentException("Callee number " + callDto.getCalleeNumber() + " is busy.");
+                throw new CallBadRequestException("Callee number " + callDto.getCalleeNumber() + " is busy.");
             }
         }
     }

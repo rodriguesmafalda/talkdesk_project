@@ -49,10 +49,6 @@ class CallServiceImplTest {
     @Mock
     private CallRepository callRepository;
 
-    @Mock
-    private Pageable pageableMock;
-
-
     @Test
     void givenNoParams_whenGetCalls_thenShouldFindCall() {
         Call call = createDummyCall(ENDED_CALL);
@@ -200,7 +196,7 @@ class CallServiceImplTest {
 
         when(callRepository.save(any(Call.class))).thenReturn(this.callServiceImpl.transformToEntity(callDto));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+        Exception exception = assertThrows(CallBadRequestException.class, () ->
                 callServiceImpl.saveCall(callDto));
 
         String expectedMessage = "Callee number should be different from than caller number";
@@ -220,8 +216,7 @@ class CallServiceImplTest {
         when(this.callRepository.findCallsByStatus(ON_CALL)).thenReturn(Collections.singletonList(call));
         when(this.callRepository.save(any(Call.class))).thenReturn(call);
 
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+        Exception exception = assertThrows(CallBadRequestException.class, () ->
                 callServiceImpl.saveCall(callDto));
 
         String expectedMessage = "Caller number " + CALLER_NUMBER + " is busy";
@@ -241,7 +236,7 @@ class CallServiceImplTest {
         when(this.callRepository.save(any(Call.class))).thenReturn(call);
 
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+        Exception exception = assertThrows(CallBadRequestException.class, () ->
                 callServiceImpl.saveCall(callDto));
 
         String expectedMessage = "Callee number " + CALLEE_NUMBER + " is busy";
@@ -309,8 +304,8 @@ class CallServiceImplTest {
         call.setId(CALL_ID);
         call.setCalleeNumber(CALLEE_NUMBER);
         call.setCallerNumber(CALLER_NUMBER);
-        call.setStartTime(Timestamp.valueOf("2021-06-09 16:43:19.77"));
-        call.setEndTime(Timestamp.valueOf("2021-06-09 17:43:19.77"));
+        call.setStartTime(Timestamp.valueOf("2021-07-09 10:30:10.11"));
+        call.setEndTime(Timestamp.valueOf("2021-07-09 11:30:10.11"));
         call.setType(OUTBOUND);
         call.setStatus(status);
         return call;
