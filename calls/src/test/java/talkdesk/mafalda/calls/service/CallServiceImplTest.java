@@ -281,6 +281,32 @@ class CallServiceImplTest {
 
     }
 
+    @Test
+    void givenInvalidCallId_whenEndingCall_thenThrowReturnCallNotFoundException() {
+        Call call = createDummyCall(ON_CALL);
+        when(callRepository.findById(call.getId())).thenReturn(Optional.of(call));
+
+        Exception exception = assertThrows(CallNotFoundException.class, () ->
+                callServiceImpl.endCall(INVALID_CALL_ID));
+
+        String expectedMessage = "Call ID does not exist: " + INVALID_CALL_ID;
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void givenCallIdAlreadyEnded_whenEndingCall_thenThrowReturnCallNotFoundException() {
+        Call call = createDummyCall(ENDED_CALL);
+        when(callRepository.findById(call.getId())).thenReturn(Optional.of(call));
+
+        Exception exception = assertThrows(CallBadRequestException.class, () ->
+                callServiceImpl.endCall(call.getId()));
+
+        String expectedMessage = "The call is already ended: " + call.getId();
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
 
     @Test
     void givenValidRequest_whenGetCallStatistics_thenShouldReturnStatisticsForAllCalls() {

@@ -4,11 +4,35 @@ import java.util.Map;
 
 public class CallStatistics {
 
+    /**
+     * total Inbound call duration
+     */
     private Map<String, String> totalInboundCallDuration;
+
+    /**
+     * total Outbound call duration
+     */
     private Map<String, String> totalOutboundCallDuration;
+
+    /**
+     * total number of calls
+     */
     private int totalNumberOfCalls;
+
+    /**
+     * total calls made by caller number
+     */
+
     private Map<String, Map<String, Long>> totalCallsByCallerNumber;
+
+    /**
+     * total calls made by callee number
+     */
     private Map<String, Map<String, Long>> totalCallsByCalleeNumber;
+
+    /**
+     * total cost by outbound calls
+     */
     private Map<String, Double> totalCostByOutbound;
 
     public Map<String, String> getTotalInboundCallDuration() {

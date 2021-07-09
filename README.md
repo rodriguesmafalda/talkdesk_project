@@ -48,6 +48,7 @@ This client consists of the following requests:
 * **Delete Call:** Deletes the call information in the database.
 * **Get Statistics:** Displays all call information aggregated by day such as total call duration by type,
  total number of calls, number of calls by caller number, number of calls by callee number and total call cost.
+ * **Change Log Level:** Change the application logging level
 
 
 ### Prerequisites
@@ -98,18 +99,14 @@ http://localhost:8080/calls-ui.html
 ```shell
 # Get the logs of call-service
 docker-compose logs -f call-service
+
+# Change logging level
+curl -X "POST" "http://localhost:8080/actuator/loggers/talkdesk.mafalda.calls" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -d $'{
+  "configuredLevel": "DEBUG"
+}'  
 ```
-
-
-#### db hacks
-docker exec -it <pod_name> psql -U calls
-
-###### show databases
-SELECT datname FROM pg_database;
-
-##dump db
-docker exec -it postgres pg_dump -U calls > backup.sql
-
 
 
 [SpringBoot]: <https://spring.io/projects/spring-boot/>

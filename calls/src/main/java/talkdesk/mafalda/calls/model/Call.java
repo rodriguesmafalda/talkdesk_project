@@ -11,9 +11,6 @@ import java.sql.Timestamp;
 @Table(name = "call")
 public class Call {
 
-    public Call() {
-    }
-
     /**
      * Id of the call (primary key)
      */
@@ -21,46 +18,42 @@ public class Call {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
-
     /**
-     * the phone number of the caller
+     * number of the caller
      */
     @NotNull
     @Column(name = "caller_number")
     private String callerNumber;
-
     /**
-     * the phone number of the callee
+     * number of the callee
      */
     @NotNull
     @Column(name = "callee_number")
     private String calleeNumber;
-
     /**
      * start time of the call
      */
     @Column(name = "start_time")
     private Timestamp startTime;
-
     /**
      * end time of the call
      */
     @Column(name = "end_time")
     private Timestamp endTime;
-
     /**
-     * type of the call (Inbound or Outbound)
+     * type of the call (INBOUND or OUTBOUND)
      */
     @NotNull
     @Column(name = "type")
     private String type;
-
     /**
      * status of the call (ON_CALL or ENDED_CALL)
      */
     @Column(name = "status")
     private String status;
 
+    public Call() {
+    }
 
     public long getId() {
         return id;

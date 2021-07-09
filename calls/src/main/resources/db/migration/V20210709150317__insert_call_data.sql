@@ -1,21 +1,21 @@
 
 INSERT INTO call (caller_number, callee_number, start_time, end_time, type, status)
-VALUES('231441231', '231441232', '2021-06-09 16:43:19.77','2021-06-09 17:43:19.77', 'INBOUND', 'ENDED_CALL');
+VALUES('064035142', '034485112', '2021-06-09 17:50:13.60','2021-06-09 18:48:13.60', 'INBOUND', 'ENDED_CALL');
 
 INSERT INTO call (caller_number, callee_number, start_time, end_time, type, status)
-VALUES('231441231', '231441232', '2021-06-09 09:00:19.77','2021-06-09 10:30:30.77', 'OUTBOUND', 'ENDED_CALL');
+VALUES('064035142', '034485112', '2021-06-09 06:04:13.60','2021-06-09 06:40:48.36', 'OUTBOUND', 'ENDED_CALL');
 
 INSERT INTO call (caller_number, callee_number, start_time, end_time, type, status)
-VALUES('231441234', '239441236', '2021-06-09 12:30:19.77','2021-06-09 13:00:19.77', 'INBOUND', 'ENDED_CALL');
+VALUES('231441234', '004234891', '2021-06-09 13:43:13.60','2021-06-09 14:00:13.60', 'INBOUND', 'ENDED_CALL');
 
 INSERT INTO call (caller_number, callee_number, start_time, end_time, type, status)
-VALUES('231441232', '236441236', '2021-06-09 20:42:19.77','2021-06-09 21:00:02.77', 'OUTBOUND', 'ENDED_CALL');
+VALUES('034485112', '084534001', '2021-06-09 22:30:13.60','2021-06-09 23:22:50.20', 'OUTBOUND', 'ENDED_CALL');
 
 INSERT INTO call (caller_number, callee_number, start_time, end_time, type, status)
-VALUES('231441231', '236441236', '2021-06-10 10:42:19.77','2021-06-10 11:15:02.77', 'INBOUND', 'ENDED_CALL');
+VALUES('064035142', '084534001', '2021-06-10 13:46:13.60','2021-06-10 14:16:04.62', 'INBOUND', 'ENDED_CALL');
 
 INSERT INTO call (caller_number, callee_number, start_time, end_time, type, status)
-VALUES('912345677', '923456789', '2021-06-10 14:20:19.77','2021-06-10 14:22:02.77', 'OUTBOUND', 'ENDED_CALL');
+VALUES('064256448', '074524408', '2021-06-10 13:33:13.60','2021-06-10 13:39:50.20', 'OUTBOUND', 'ENDED_CALL');
 
 INSERT INTO call (caller_number, callee_number, start_time, end_time, type, status)
-VALUES('923456789', '912345677', '2021-06-10 17:42:19.77','2021-06-10 18:00:02.77', 'INBOUND', 'ENDED_CALL');
+VALUES('074524408', '064256448', '2021-06-10 16:42:13.60','2021-06-10 19:00:50.20', 'INBOUND', 'ENDED_CALL');

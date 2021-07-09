@@ -15,10 +15,12 @@ import talkdesk.mafalda.calls.model.CallStatistics;
 import talkdesk.mafalda.calls.repos.CallRepository;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -43,13 +45,15 @@ public class CallServiceImpl implements CallService {
         Pageable paging = PageRequest.of(pageNumber, pageSize);
 
         if (!type.isEmpty() && (!type.equals(INBOUND) && !type.equals(OUTBOUND))) {
+            LOGGER.error("The call type must be OUTBOUND or INBOUND not {}", type);
             throw new CallBadRequestException("The call type must be OUTBOUND or INBOUND not " + type);
         }
 
         if (!status.isEmpty() && (!status.equals(ON_CALL) && !status.equals(ENDED_CALL))) {
+            LOGGER.error("The call status must be ON_CALL or ENDED_CALL not {}", status);
             throw new CallBadRequestException("The call status must be ON_CALL or ENDED_CALL not " + status);
         }
-
+        LOGGER.debug("Get the calls");
         if (!type.isEmpty() && status.isEmpty()) {
             return this.callRepository.findCallsByType(type, paging);
         } else if (type.isEmpty() && !status.isEmpty()) {
@@ -57,7 +61,6 @@ public class CallServiceImpl implements CallService {
         } else if (type.isEmpty()) {
             return this.callRepository.findAll(paging);
         }
-
         return this.callRepository.findAllByStatusAndType(status, type, paging);
     }
 
@@ -74,8 +77,7 @@ public class CallServiceImpl implements CallService {
     public List<Call> saveCalls(List<CallDto> callsDto) {
         List<Call> calls = callsDto.stream().map(callDto -> {
             checkIfCallIsPossible(callDto);
-            Call call = transformToEntity(callDto);
-            return call;
+            return transformToEntity(callDto);
         }).collect(Collectors.toList());
         LOGGER.debug("Creating calls: {}", calls);
         return this.callRepository.saveAll(calls);
@@ -83,7 +85,7 @@ public class CallServiceImpl implements CallService {
 
     @Override
     public Call endCall(long callId) {
-        Call call = verifyCallId(callId);
+        Call call = checkIfCallEnded(callId);
         setCallStatus(call, ENDED_CALL);
         call.setEndTime(new Timestamp(System.currentTimeMillis()));
         LOGGER.debug("Ending the call the call: {}", call.getId());
@@ -157,6 +159,28 @@ public class CallServiceImpl implements CallService {
     }
 
     /**
+     * Auxiliary function to verify if the id of the call exists and if the call is already ended
+     *
+     * @param callId the id of the call
+     * @return the Call
+     */
+    private Call checkIfCallEnded(long callId) {
+        LOGGER.debug("Verifying existence of call for ID: {}", callId);
+        Optional<Call> callOptional = this.callRepository.findById(callId);
+        if (callOptional.isPresent()) {
+            Call call = callOptional.get();
+            if (call.getStatus().equals(ENDED_CALL)) {
+                LOGGER.error("The call ID is already ended {}", callId);
+                throw new CallBadRequestException("The call is already ended: " + callId);
+
+            }
+            return call;
+        }
+        LOGGER.error("Call ID does not exist: {}", callId);
+        throw new CallNotFoundException(callId);
+    }
+
+    /**
      * Auxiliary function to verify if the id of the call exists
      *
      * @param callId the id of the call
@@ -179,31 +203,24 @@ public class CallServiceImpl implements CallService {
      */
     public Map<String, String> getDurationCallByType(String type) {
         List<Call> calls = this.callRepository.findCallsByTypeAndStatus(type, ENDED_CALL);
-        Map<String, Long> statsDuration = new HashMap<>();
-        Map<String, String> durationCall = new HashMap<>();
+        Map<String, Long> durationByTypeAggregatedByDay = new HashMap<>();
+        Map<String, String> totalDurationCall = new HashMap<>();
 
         calls.forEach(call -> {
-            long duration = call.getEndTime().getTime() - call.getStartTime().getTime();
-
-            //get date (day-month-year)
-            String date = getDate(call.getStartTime());
-
-            //check if the date exists on the map
-            if (!statsDuration.containsKey(date)) {
-                //add the date and the call duration
-                statsDuration.put(date, duration);
+            long callDuration = call.getEndTime().getTime() - call.getStartTime().getTime();
+            String date = formatDate(call.getStartTime());
+            if (!durationByTypeAggregatedByDay.containsKey(date)) {
+                durationByTypeAggregatedByDay.put(date, callDuration);
             } else {
-                //assign to the existing key (date), an increase of the call duration
-                statsDuration.put(date, statsDuration.get(date) + duration);
+                durationByTypeAggregatedByDay.put(date, durationByTypeAggregatedByDay.get(date) + callDuration);
             }
         });
 
-        //Format date to return the correct call duration
-        for (Map.Entry<String, Long> entry : statsDuration.entrySet()) {
-            durationCall.put(entry.getKey(), timeToString(entry.getValue()));
+        for (Map.Entry<String, Long> entry : durationByTypeAggregatedByDay.entrySet()) {
+            totalDurationCall.put(entry.getKey(), formatCallDurationTime(entry.getValue()));
         }
 
-        return durationCall;
+        return totalDurationCall;
     }
 
 
@@ -220,8 +237,8 @@ public class CallServiceImpl implements CallService {
         for (Call call : calls) {
             String caller = call.getCallerNumber();
             String callee = call.getCalleeNumber();
-            parseCallByNumberType(call, callsByCaller, caller);
-            parseCallByNumberType(call, callsByCallee, callee);
+            totalCallsByNumberType(call, callsByCaller, caller);
+            totalCallsByNumberType(call, callsByCallee, callee);
         }
 
         callStatistics.setTotalCallsByCallerNumber(callsByCaller);
@@ -233,23 +250,19 @@ public class CallServiceImpl implements CallService {
      * Auxiliary function to parse the calls by callee number or caller number
      *
      * @param call              the call
-     * @param callsByNumberType map to collect the numberType
+     * @param callsByNumberType map to collect the numberType aggregated by date
      * @param numberType        Callee Number or Caller Number
      */
-    public void parseCallByNumberType(Call call, Map<String, Map<String, Long>> callsByNumberType, String numberType) {
+    public void totalCallsByNumberType(Call call, Map<String, Map<String, Long>> callsByNumberType, String numberType) {
 
-        String date = getDate(call.getStartTime());
+        String date = formatDate(call.getStartTime());
 
-        //check if the date already exists
-        // if not create a new hashmap for this date
         if (!callsByNumberType.containsKey(date)) {
             callsByNumberType.put(date, new HashMap<>());
         }
 
-        //get the date for the map
         Map<String, Long> calls = callsByNumberType.get(date);
 
-        //check if this numberType exists
         if (!calls.containsKey(numberType)) {
             calls.put(numberType, (long) 1);
         } else {
@@ -267,31 +280,25 @@ public class CallServiceImpl implements CallService {
      */
     public Map<String, Double> getTotalCostByOutbound() {
 
-        Map<String, Double> mapTotalCost = new HashMap<>();
+        Map<String, Double> totalCostByOutbound = new HashMap<>();
 
-        //list of call filtering by type and ended status
         List<Call> calls = callRepository.findCallsByTypeAndStatus(OUTBOUND, ENDED_CALL);
 
         for (Call call : calls) {
             long durationCallTime = call.getEndTime().getTime() - call.getStartTime().getTime();
             long durationCallTimeMinutes = TimeUnit.MILLISECONDS.toMinutes(durationCallTime) % TimeUnit.HOURS.toMinutes(1);
 
-            //totalCost defined by default with 0.10 because the first 5 durationCallTimeMinutes have a constant value
             double totalCost = 0.10;
-            //after the five durationCallTimeMinutes there is an increase of 0.05 per minute
             if (durationCallTimeMinutes > 5)
                 totalCost = (durationCallTimeMinutes - 5) * 0.05;
 
-            //check if the date exists on the map
-            if (!mapTotalCost.containsKey(getDate(call.getStartTime()))) {
-                //add the date and the total call cost
-                mapTotalCost.put(getDate(call.getStartTime()), totalCost);
+            if (!totalCostByOutbound.containsKey(formatDate(call.getStartTime()))) {
+                totalCostByOutbound.put(formatDate(call.getStartTime()), totalCost);
             } else {
-                //assign to the existing date, an increase the total call cost
-                mapTotalCost.put(getDate(call.getStartTime()), mapTotalCost.get(getDate(call.getStartTime())) + totalCost);
+                totalCostByOutbound.put(formatDate(call.getStartTime()), totalCostByOutbound.get(formatDate(call.getStartTime())) + totalCost);
             }
         }
-        return mapTotalCost;
+        return totalCostByOutbound;
     }
 
     /**
@@ -305,34 +312,27 @@ public class CallServiceImpl implements CallService {
     }
 
     /**
-     * Auxiliary function to format the date to a string
+     * Auxiliary function to format time value to a date (dd-mm-yyyy)
      *
-     * @param time timestamp
+     * @param time time
      * @return time into String
      */
-    private String getDate(Timestamp time) {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(time.getTime());
-
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-
-        return String.format("%s-%s-%s", day, month, year);
+    private String formatDate(Timestamp time) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(time);
     }
 
     /**
-     * Auxiliary function to return time into String
+     * Auxiliary function to format the call duration into hh:mm:ss
      *
-     * @param time required time
-     * @return time into String
+     * @param callDuration call duration
+     * @return call duration into String
      */
-    private String timeToString(long time) {
+    private String formatCallDurationTime(long callDuration) {
         return String.format("%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(time),
-                TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1),
-                TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
+                TimeUnit.MILLISECONDS.toHours(callDuration),
+                TimeUnit.MILLISECONDS.toMinutes(callDuration) % TimeUnit.HOURS.toMinutes(1),
+                TimeUnit.MILLISECONDS.toSeconds(callDuration) % TimeUnit.MINUTES.toSeconds(1));
     }
 
 }

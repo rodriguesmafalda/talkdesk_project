@@ -1,7 +1,7 @@
 {
 	"variables": [],
 	"info": {
-		"name": "Talkdesk_challenge",
+		"name": "talkdesk_challenge",
 		"_postman_id": "74146610-3360-02a9-8952-4ad596432282",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
@@ -11,7 +11,7 @@
 			"name": "Get Calls",
 			"request": {
 				"url": {
-					"raw": "http://localhost:8080/calls?type=INBOUND&status=ON_CALL",
+					"raw": "http://localhost:8080/calls",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -37,15 +37,17 @@
 						},
 						{
 							"key": "type",
-							"value": "INBOUND",
+							"value": "OUTBOUND",
 							"equals": true,
-							"description": ""
+							"description": "",
+							"disabled": true
 						},
 						{
 							"key": "status",
 							"value": "ON_CALL",
 							"equals": true,
-							"description": ""
+							"description": "",
+							"disabled": true
 						}
 					],
 					"variable": []
@@ -82,7 +84,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"callerNumber\": \"12\",\n\t\"calleeNumber\": \"123456\",\n\t\"type\":\"INBOUND\"\n}"
+					"raw": "{\n\t\"callerNumber\": \"914493829\",\n\t\"calleeNumber\": \"9828348\",\n\t\"type\":\"INBOUND\"\n}"
 				},
 				"description": ""
 			},
@@ -102,7 +104,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"callerNumber\": \"12\",\n\t\"calleeNumber\": \"123456\",\n\t\"type\":\"INBOUND\"\n}"
+					"raw": "[\n\t{\n\t\t\"callerNumber\": \"034125192\",\n\t\t\"calleeNumber\": \"834026192\",\n\t\t\"type\":\"INBOUND\"\n\t\t\n\t},\n\t{\n\t\t\"callerNumber\": \"134324323\",\n\t\t\"calleeNumber\": \"1234545359873\",\n\t\t\"type\":\"OUTBOUND\"\n\t}\n]"
 				},
 				"description": ""
 			},
@@ -111,7 +113,7 @@
 		{
 			"name": "End Call",
 			"request": {
-				"url": "http://localhost:8080/calls/endCall/1",
+				"url": "http://localhost:8080/calls/end/6",
 				"method": "PATCH",
 				"header": [
 					{
@@ -122,7 +124,27 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"callerNumber\": \"12\",\n\t\"calleeNumber\": \"123456\",\n\t\"type\":\"INBOUND\"\n}"
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Change log level",
+			"request": {
+				"url": "http://localhost:8080/actuator/loggers/talkdesk.mafalda.calls",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"configuredLevel\": \"DEBUG\"\n}"
 				},
 				"description": ""
 			},
@@ -131,7 +153,7 @@
 		{
 			"name": "Delete Call",
 			"request": {
-				"url": "http://localhost:8080/calls/7",
+				"url": "http://localhost:8080/calls/1",
 				"method": "DELETE",
 				"header": [
 					{
