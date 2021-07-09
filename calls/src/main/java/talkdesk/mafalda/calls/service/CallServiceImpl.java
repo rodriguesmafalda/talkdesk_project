@@ -47,14 +47,14 @@ public class CallServiceImpl implements CallService {
         }
 
         if (!status.isEmpty() && (!status.equals(ON_CALL) && !status.equals(ENDED_CALL))) {
-            throw new IllegalArgumentException("The call status must be ON_CALL or ENDED_CALL not " + status);
+            throw new CallBadRequestException("The call status must be ON_CALL or ENDED_CALL not " + status);
         }
 
         if (!type.isEmpty() && status.isEmpty()) {
             return this.callRepository.findCallsByType(type, paging);
         } else if (type.isEmpty() && !status.isEmpty()) {
             return this.callRepository.findCallsByStatus(status, paging);
-        }else if (type.isEmpty() && status.isEmpty()){
+        } else if (type.isEmpty() && status.isEmpty()) {
             return this.callRepository.findAll(paging);
         }
 
@@ -121,13 +121,13 @@ public class CallServiceImpl implements CallService {
      *
      * @param callDto model received
      */
+    //TODO: CHANGE EXCEPTION
     private void checkIfCallIsPossible(CallDto callDto) {
 
         if (callDto.getCalleeNumber().equals(callDto.getCallerNumber())) {
             LOGGER.error("Callee number should be different from than caller number");
             throw new IllegalArgumentException("Callee number should be different from than caller number.");
         }
-
 
         List<Call> calls = callRepository.findCallsByStatus(ON_CALL);
         for (Call call : calls) {
@@ -147,7 +147,7 @@ public class CallServiceImpl implements CallService {
      * @param callDto data received
      * @return the data received on Call entity
      */
-    private Call transformToEntity(CallDto callDto) {
+    protected Call transformToEntity(CallDto callDto) {
         Call call = new Call();
         call.setCalleeNumber(callDto.getCalleeNumber());
         call.setCallerNumber(callDto.getCallerNumber());
@@ -166,7 +166,7 @@ public class CallServiceImpl implements CallService {
     private Call verifyCallId(long callId) {
         LOGGER.debug("Verifying existence of call for ID: {}", callId);
         return this.callRepository.findById(callId).orElseThrow(() -> {
-            LOGGER.error("Call ID not found: {}", callId);
+            LOGGER.error("Call ID does not exist: {}", callId);
             throw new CallNotFoundException(callId);
         });
     }

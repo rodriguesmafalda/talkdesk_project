@@ -2,8 +2,6 @@ package talkdesk.mafalda.calls.service;
 
 import org.springframework.data.domain.Page;
 import talkdesk.mafalda.calls.dtos.CallDto;
-import talkdesk.mafalda.calls.enums.CallStatus;
-import talkdesk.mafalda.calls.enums.CallType;
 import talkdesk.mafalda.calls.model.Call;
 import talkdesk.mafalda.calls.model.CallStatistics;
 

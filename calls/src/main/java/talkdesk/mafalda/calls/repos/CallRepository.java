@@ -20,9 +20,9 @@ public interface CallRepository extends JpaRepository<Call, Long> {
     Page<Call> findCallsByStatus(String status, Pageable pageable);
 
     /**
-     * @param type   call status
+     * @param type     call status
      * @param pageable page
-     * @return page of calls by status
+     * @return page of calls by type
      */
     Page<Call> findCallsByType(String type, Pageable pageable);
 

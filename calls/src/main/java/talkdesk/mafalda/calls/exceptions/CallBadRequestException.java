@@ -1,19 +1,11 @@
 package talkdesk.mafalda.calls.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class CallBadRequestException extends RuntimeException {
-
-    private String description;
-
-    public CallBadRequestException(String description) {
-        super(description);
+    public CallBadRequestException(String message) {
+        super(message);
     }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-
 }
-
-
-    

@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import talkdesk.mafalda.calls.dtos.CallDto;
-import talkdesk.mafalda.calls.exceptions.CallBadRequestException;
-import talkdesk.mafalda.calls.exceptions.CallNotFoundException;
 import talkdesk.mafalda.calls.model.Call;
 import talkdesk.mafalda.calls.model.CallStatistics;
 import talkdesk.mafalda.calls.service.CallService;
@@ -32,15 +30,13 @@ public class CallController {
         this.callService = callService;
     }
 
-    //TODO: CONTROL THE ERROR OF BAD PARAMS
     @Operation(summary = "Get the pagination of the list of calls")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<Call> getCalls(
             @ParameterObject Pageable pageable,
             @RequestParam(value = "type", required = false, defaultValue = "") String type,
-            @RequestParam(value = "status", required = false, defaultValue = "") String status)
-            throws CallBadRequestException {
+            @RequestParam(value = "status", required = false, defaultValue = "") String status) {
         LOGGER.info("Accessing GET Calls endpoint");
         return callService.getCalls(pageable.getPageNumber(), pageable.getPageSize(), type, status);
 
@@ -65,7 +61,7 @@ public class CallController {
     @Operation(summary = "End call")
     @PatchMapping("/end/{callId}")
     @ResponseStatus(HttpStatus.OK)
-    public Call endCall(@PathVariable(value = "callId") Long callId) throws CallNotFoundException {
+    public Call endCall(@PathVariable(value = "callId") Long callId) {
         LOGGER.info("Accessing PATCH Calls endpoint for ID: {}", callId);
         return callService.endCall(callId);
     }
@@ -73,7 +69,7 @@ public class CallController {
     @Operation(summary = "Delete call")
     @DeleteMapping("/{callId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCall(@PathVariable(value = "callId") Long callId) throws CallNotFoundException {
+    public void deleteCall(@PathVariable(value = "callId") Long callId) {
         LOGGER.info("Accessing DELETE Call endpoint for ID: {}", callId);
         callService.deleteCall(callId);
     }
@@ -82,16 +78,6 @@ public class CallController {
     public CallStatistics getCallStatistics() {
         LOGGER.info("Accessing GET Call Statistics endpoint");
         return callService.getCallStatistics();
-    }
-
-    @ExceptionHandler({CallNotFoundException.class})
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public void handleCallNotFoundException(CallNotFoundException exception) {
-    }
-
-    @ExceptionHandler({CallBadRequestException.class})
-    //@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public void handleCallBadRequestException(CallBadRequestException exception) {
     }
 
 }
