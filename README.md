@@ -59,17 +59,12 @@ This client consists of the following requests:
 
 ## Run the application
 
-1. Create a common network and run the application
-```sh
-docker network create call-service
-```
-
-2. Run the application
+1. Run the application
 ```sh
 docker-compose up -d --build
 ```
 
-3. Stop and removing the application
+2. Stop and removing the application
 ```sh
 docker-compose down
 ```
@@ -79,7 +74,7 @@ docker-compose down
 
 You can use [Postman] to make requests to the application by importing the file: **talkdesk_challenge.postman_collection.json**
 
-Also, this application have an integration with [OpenApi] and [Swagger Ui]. Because of that is possible 
+Also, this application have an integration with [OpenApi] and [SwaggerUi]. Because of that is possible 
 to see the documentation by the endpoint:
 
 ```sh
@@ -116,6 +111,6 @@ curl -X "POST" "http://localhost:8080/actuator/loggers/talkdesk.mafalda.calls" \
 [Docker-compose]: <https://docs.docker.com/compose/install/>
 [Postman]: <https://learning.postman.com/docs/getting-started/introduction/>
 [OpenApi]: https://swagger.io/specification/
-[Swagger Ui]: https://swagger.io/tools/swagger-ui/
+[SwaggerUi]: https://swagger.io/tools/swagger-ui/
 
 

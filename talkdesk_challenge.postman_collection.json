@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "talkdesk_challenge",
-		"_postman_id": "74146610-3360-02a9-8952-4ad596432282",
+		"_postman_id": "333a6ef5-7f06-63a4-dc6a-8ee3b0d06462",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -65,7 +65,10 @@
 				"url": "http://localhost:8080/calls/statistics",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []

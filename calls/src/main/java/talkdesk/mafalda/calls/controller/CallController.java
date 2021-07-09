@@ -74,6 +74,7 @@ public class CallController {
         callService.deleteCall(callId);
     }
 
+    @Operation(summary = "Get all call statistics")
     @GetMapping(value = "/statistics")
     public CallStatistics getCallStatistics() {
         LOGGER.info("Accessing GET Call Statistics endpoint");
